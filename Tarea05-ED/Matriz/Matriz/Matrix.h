@@ -4,6 +4,7 @@
 using std::cout;
 using std::cin;
 using std::runtime_error;
+using std::endl;
 
 template<typename E>
 class Matrix
@@ -20,14 +21,14 @@ public:
 	{
 		if (fila <= 0 || columna <= 0)
 		{
-			runtime_error("El numero de filas y columnas debe ser mayor a cero.");
+			throw runtime_error("El numero de filas y columnas debe ser mayor a cero.");
 		}
 
 
 		matrix = new E * [fila];
 		for (int i = 0; i < fila; i++)
 		{
-			matrix[i] = new E[columna];
+			matrix[i] = new E[columna]();
 		}
 
 		this->fila = fila;
@@ -47,7 +48,7 @@ public:
 	{
 		if (f < 0 || f >= fila || c < 0 || c >= columna)
 		{
-			runtime_error("Indice fuera de rango.");
+			throw runtime_error("Indice fuera de rango.");
 		}
 
 		matrix[f][c] = value;
@@ -68,7 +69,7 @@ public:
 	{ 
 		if (f < 0 || f >= fila || c < 0 || c >= columna)
 		{
-			runtime_error("Indice fuera de rango.");
+			throw runtime_error("Indice fuera de rango.");
 		}
 		return matrix[f][c];
 
@@ -76,14 +77,14 @@ public:
 
 	E getValue(int fila, int columna)
 	{
-		if (fila < 0 || fila >= filas)
+		if (fila < 0 || fila >= this->fila)
 		{
-			runtime_error("Valor no valido.");
+			throw runtime_error("Valor no valido.");
 		}
 
-		if (columna < 0 || columna >= columnas)
+		if (columna < 0 || columna >= this->columna)
 		{
-			runtime_error("Valor no valido.");
+			throw runtime_error("Valor no valido.");
 		}
 
 		return matrix[fila][columna];
@@ -91,14 +92,14 @@ public:
 
 	void setValue(int fila, int columna, E value)
 	{
-		if (fila < 0 || fila >= filas)
+		if (fila < 0 || fila >= this->fila)
 		{
-			runtime_error("Valor no valido.");
+			throw runtime_error("Valor no valido.");
 		}
 
-		if (columna < 0 || columna >= columnas)
+		if (columna < 0 || columna >= this->columna)
 		{
-			runtime_error("Valor no valido.");
+			throw runtime_error("Valor no valido.");
 		}
 
 		matrix[fila][columna] = value;
@@ -112,18 +113,6 @@ public:
 	int getColumnas()
 	{
 		return columna;
-	}
-
-
-	void setAll(E value)
-	{
-		for (int i = 0; i < fila; i++)
-		{
-			for (int j = 0; j < columna; j++)
-			{
-				matrix[i][j] = value;
-			}
-		}
 	}
 
 	void transpose()
@@ -168,7 +157,7 @@ public:
 
 		for (int i = 0; i < fila + 1; i++)
 		{
-			mNueva[i] = new E[columa];
+			mNueva[i] = new E[columna];
 		}
 
 
@@ -183,7 +172,7 @@ public:
 
 		for (int j = 0; j < columna; j++)
 		{
-			nueva[fila][j] = value;
+			mNueva[fila][j] = value;
 		}
 
 
@@ -259,7 +248,7 @@ public:
 
 		int filaNueva = 0;
 
-		for (int i = 0, i < fila; i++)
+		for (int i = 0; i < fila; i++)
 		{
 			if (i != row)
 			{
@@ -267,9 +256,11 @@ public:
 				{
 					mNueva[filaNueva][j] = matrix[i][j];
 				}
+
+				filaNueva++;
 			}
 			
-			filaNueva++;
+			
 		}
 
 
